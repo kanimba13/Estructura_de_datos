@@ -36,6 +36,48 @@ int binarySearch(int A[], int i, int j, int k)
     return result;
 }
 
+int BinarySearchFirstOccurrence ( int A[] , int i, int j, int k)
+{
+    int result , result2 ;
+    
+    result = binarySearch(A, i, j, k);
+
+    if( result >= 0)
+    {
+        result2 = binarySearch (A, i, result - 1, k) ;
+
+        while ( result2 >= 0)
+        {
+            result = result2 ;
+            result2 = binarySearch(A, i, result - 1, k) ;
+        }
+
+    }
+
+    return result ;
+}
+
+int BinarySearchLastOccurrence ( int A[] , int i, int j, int k)
+{
+    int result , result2 ;
+    result = binarySearch (A, i, j, k);
+    
+    if( result >= 0)
+    {
+        result2 = binarySearch(A, result + 1 , j, k) ;
+        
+        while ( result2 >= 0)
+        {
+
+        result = result2 ;
+        result2 = binarySearch(A, result + 1 , j, k) ;
+
+        }
+    }
+
+    return result ;
+}
+
 int main()
 {
     int A[100], index, n, queries, idQuery, k, position;
