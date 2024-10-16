@@ -116,10 +116,10 @@ void MinPQ_Insert(int A[], int key, int *heap_size) {
 
 int main() {
 
-    int A[MAX + 1], operation, element, heap_size = 0, n, idElement;
+    int A[MAX + 1], element, heap_size = 0, n, idElement;
     long long int result;
 
-    while(scanf("%d", &operation) && (n > 0)) {
+    while(scanf("%d", &n) && (n > 0)) {
 
         heap_size = 0;
         result = 0;
@@ -134,8 +134,8 @@ int main() {
             element += MinPQ_Extract(A, &heap_size);
             result += element;
             MinPQ_Insert(A, element, &heap_size);
+            
         }
-
         printf("%lld\n", result);
     }
 

@@ -90,15 +90,16 @@ void MinPQ_DecreaseKey(int A[], int i, int key) {
     if(key > A[i]){
         printf("Error: new key is larger than current key\n");
     }
+    else{
+        A[i] = key;
 
-    A[i] = key;
-
-    while(i > 1 && A[parent(i)] > A[i]){
-        
-        temp = A[i];
-        A[i] = A[parent(i)];
-        A[parent(i)] = temp;
-        i = parent(i);
+        while(i > 1 && A[parent(i)] > A[i]){
+            
+            temp = A[i];
+            A[i] = A[parent(i)];
+            A[parent(i)] = temp;
+            i = parent(i);
+        }
     
     }
 
