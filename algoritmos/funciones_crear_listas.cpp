@@ -17,6 +17,7 @@ struct node *makeList(int n){
         head = newNode;
         n--;
     }
+    return head;
 }
 
 void printList(struct node *head){
