@@ -8,7 +8,7 @@
 
 struct nodeTree
 {
-    int element;
+    int key;
     struct nodeTree *left;
     struct nodeTree *right;
     struct nodeTree *parent;
@@ -17,14 +17,14 @@ struct nodeTree
 void inOrderTreeWalk(struct nodeTree *x){
     if(x != NULL){
         inOrderTreeWalk(x->left);
-        printf("%d ", x->element);
+        printf("%d ", x->key);
         inOrderTreeWalk(x->right);
     }
 }
 
 struct nodeTree *treeSearch(struct nodeTree *x, int k){
-    while((x != NULL) && (k != x->element)){
-        if(k < x->element){
+    while((x != NULL) && (k != x->key)){
+        if(k < x->key){
             x = x->left;
         }else{
             x = x->right;
@@ -76,14 +76,14 @@ struct nodeTree *treePredecesor(struct nodeTree *x){
 struct nodeTree *treeInsert(struct nodeTree *T, int k){
     struct nodeTree *x, *y, *z;
     z = (struct nodeTree *)malloc(sizeof(struct nodeTree));
-    z->element = k;
+    z->key = k;
     z->left = NULL; 
     z->right = NULL;
     y = NULL;
     x = T;
     while(x != NULL){
         y = x;
-        if(z->element < x->element){
+        if(z->key < x->key){
             x = x->left;
         }else{
             x = x->right;
@@ -92,7 +92,7 @@ struct nodeTree *treeInsert(struct nodeTree *T, int k){
     z->parent = y;
     if(y == NULL){
         T = z;
-    }else if(z->element < y->element){
+    }else if(z->key < y->key){
         y->left = z;
     }else{
         y->right = z;
@@ -123,7 +123,7 @@ struct nodeTree *treeDelete(struct nodeTree *T, struct nodeTree *z){
         y->parent->right = x;
     }
     if(y != z){
-        z->element = y->element;
+        z->key = y->key;
         // Aqui se pueden copiar los campos de y a z
     }
     free(y);
@@ -132,23 +132,27 @@ struct nodeTree *treeDelete(struct nodeTree *T, struct nodeTree *z){
 
 int main(){
     struct nodeTree *T = NULL, *x;
-    int operation, element;
-    while((scanf("%d %d", &operation, &element)) != EOF){
-        if(operation == 1){ // Insert in the tree
+    int n, element, idElement;
+    long long int sum;
+    while(scanf("%d", &n) && n > 0){
+        sum = 0;
+        for(int i = 0; i < n; i++){
+            scanf("%d", &element);
             T = treeInsert(T, element);
-            inOrderTreeWalk(T);
-        }else if(operation == 2){ // Delete in the tree
-            x = treeSearch(T, element);
-            if(x != NULL){
-                T = treeDelete(T, x);
-            }
-            else{
-                printf("the element %d is not in the tree\n", element);
-            }
-            inOrderTreeWalk(T);
-        }else{
-            printf("Invalid operation\n 1. Insert in the tree\n 2. Delete in the tree\n");
         }
+        for(idElement = 1; idElement < n; idElement++){
+            x = treeMinimum(T);
+            element = x->key;
+            T = treeDelete(T, x);
+            x = treeMinimum(T);
+            element += x->key;
+            T = treeDelete(T, x);
+            sum += element;
+            T = treeInsert(T, element);
+        }
+        printf("%lld\n", sum);
+        free(T);
+        T = NULL; 
     }
     return 0;
 }
