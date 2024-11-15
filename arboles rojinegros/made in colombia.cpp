@@ -312,26 +312,64 @@ struct nodeRBTree *RB_Delete(struct nodeRBTree *T, struct nodeRBTree *z){
     return T;
 }
 
+struct nodeRBTree *Delete_All(struct nodeRBTree *T){
+    while(T->key != NILKey){
+        T = RB_Delete(T, T);
+    }
+    return T;
+}
+
 int main(){
     struct nodeRBTree *menores, *mayores;
-    int cantidad_datos, id_datos;
+    int cantidad_datos, dato, size_menores, size_mayores;
     long long int suma;
-    float mediana;
+    double mediana;
+
     while(scanf("%d", &cantidad_datos) > 0){
+        if(cantidad_datos == 0) break;
         suma = 0;
+        // Inicializar arboles
         menores = AssignNilLeaf();
         mayores = AssignNilLeaf();
-        for(id_datos = 1; id_datos <= cantidad_datos; id_datos++){
-            if(id_datos % 2 == 1){
-                if(*treeMinimum(mayores) == NILKey){
-                    mayores = RB_Insert(mayores, id_datos);
-            }else{
-                
+        size_mayores = 0;
+        size_menores = 0;
+
+        for(int id_datos = 1; id_datos <= cantidad_datos; id_datos++){
+            scanf("%d", &dato);
+
+            if(size_mayores == size_menores){
+                if(size_mayores > 0 && dato < treeMaximum(mayores)->key){
+                    mayores = RB_Insert(mayores, dato);
+                    size_mayores++;
+                } else {
+                    menores = RB_Insert(menores, dato);
+                    mayores = RB_Insert(mayores, treeMinimum(menores)->key);
+                    size_mayores++;
+                    menores = RB_Delete(menores, treeMinimum(menores));
+                }
+            } else {
+                if(dato < treeMaximum(mayores)->key){
+                    mayores = RB_Insert(mayores, dato);
+                    menores = RB_Insert(menores, treeMaximum(mayores)->key);
+                    size_menores++;
+                    mayores = RB_Delete(mayores, treeMaximum(mayores));
+                } else {
+                    menores = RB_Insert(menores, dato);
+                    size_menores++;
+                }
             }
-            suma += treeMaximum(menores)->key;
+
+            suma += treeMaximum(mayores)->key;
         }
-        mediana = (float)suma / (float)cantidad_datos;
-        printf("%.2f\n", mediana);
+
+        // Liberar arboles
+        mayores = Delete_All(mayores);
+        menores = Delete_All(menores);
+
+        // Calcular y mostrar la mediana
+        mediana = (double)suma / (double)cantidad_datos;
+        printf("%.2lf\n", mediana);
     }
+
     return 0;
 }
