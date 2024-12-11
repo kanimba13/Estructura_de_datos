@@ -310,8 +310,8 @@ int main(){
     }
     
     AssignPositions(T);
-    //InorderTreeWalk(T);
-    //printf("\n");
+    InorderTreeWalk(T);
+    printf("\n");
 
     for(int i = 0; i < cantidad_consultas; i++){
         scanf("%s %s", palabra_menor, palabra_mayor);
@@ -324,25 +324,29 @@ int main(){
             if (strcmp(menor->key, NILKey) == 0 ){
                 T = RB_Insert(T, palabra_menor);
                 temp = TreeSuccessor(menor);
-                //printf("%s\n", temp->key);
                 pos_menor = temp->position;
+                printf("%s %d\n", temp->key , pos_menor);
                 T = RB_Delete(T, TreeSearch(T, palabra_menor));
             }else{
                 pos_menor = menor->position;
+                printf("%s %d\n", menor->key , pos_menor);
             }
             if (strcmp(mayor->key, NILKey) == 0 ){
                 T = RB_Insert(T, palabra_mayor);
                 temp = TreePredecessor(mayor);
-                //printf("%s\n", temp->key);
                 pos_mayor = temp->position;
+                printf("%s %d\n", temp->key, pos_mayor);
                 T = RB_Delete(T, TreeSearch(T, palabra_mayor));
             }else{
                 pos_mayor = mayor->position;
+                printf("%s %d\n", mayor->key, pos_mayor);
             }
         }
         else{
             pos_menor = menor->position;
+            printf("%s %d\n", menor->key , pos_menor);
             pos_mayor = mayor->position;
+            printf("%s %d\n", mayor->key, pos_mayor);
         }
         resultado = pos_mayor - pos_menor;
         printf("%d\n", resultado);
